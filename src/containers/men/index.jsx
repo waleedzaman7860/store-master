@@ -1,0 +1,47 @@
+import { useQuery } from "@tanstack/react-query";
+import { getDataFn } from "@/utils/api";
+import Page from "@/layout/pages-layout";
+
+const Men = () => {
+  // Queries
+  const {
+    isLoading,
+    error,
+    data: categories,
+  } = useQuery({ queryKey: ["categories"], queryFn: getDataFn });
+
+  if (isLoading) {
+    return (
+      <h2 className="flex justify-center items-center m-5 p-5">lOADING...</h2>
+    );
+  }
+
+  if (error) {
+    return (
+      <h2 className="flex justify-center items-center m-5 p-5">SERVER ERROR</h2>
+    );
+  }
+
+  return (
+    <Page
+      id="men"
+      spacing="pt-[120px] pb-16 md:pt-[150px] md:pb-[120px] xl:pt-[180px] xl:pb-[160px] 2xl:py-[150px]"
+    >
+      <div className="grid grid-cols-2 flex-row flex-wrap justify-start gap-4">
+        {categories &&
+          categories
+            ?.find((category) => category.title === "MEN")
+            .subCategories.map((category) => (
+              <img
+                alt={`${category.title} image`}
+                className="w-full rounded-lg shadow-lg object-cover cursor-pointer"
+                key={category.id}
+                src={category.image}
+              />
+            ))}
+      </div>
+    </Page>
+  );
+};
+
+export default Men;
